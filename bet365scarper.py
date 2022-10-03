@@ -33,6 +33,8 @@ def main():
     worldcup()
 
 def premiership():
+    options = Options()
+    options.headless = True
 
     driver = uc.Chrome(version=106, options=options)
     driver.implicitly_wait(10)
@@ -84,7 +86,8 @@ def premiership():
             pickle.dump(df_bet365_prm, output)
             output.close()
 def superleague():
-
+    options = Options()
+    options.headless = True
 
     driver = uc.Chrome(version=106, options=options)
     driver.implicitly_wait(10)
@@ -137,7 +140,8 @@ def superleague():
             output.close()
 
 def worldcup():
-    
+    options = Options()
+    options.headless = True
 
     driver = uc.Chrome(version=106, options=options)
     driver.implicitly_wait(10)
@@ -193,7 +197,8 @@ def worldcup():
 
 
 def euro():
-
+    options = Options()
+    options.headless = True
 
     driver = uc.Chrome(version=106, options=options)
     driver.implicitly_wait(10)
