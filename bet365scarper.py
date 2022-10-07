@@ -11,7 +11,7 @@ import pickle
 import re
 odds = []
 teams = []
-results = []
+result = []
 
 
 x12 = []
@@ -51,9 +51,16 @@ def premiership():
 
             for prm_odds in prm_play:
                 lst = prm_odds.find_elements(By.CLASS_NAME, "vr-EventTimesNavBarButton")
-
+                results = i.find_element(By.XPATH, ".//span[@text()= Result").click()
+                for outcome in results:
+                    finale_res = outcome.find_element(By.CLASS_NAME, "vrr-HeadToHeadParticipant_Winner ")
+                    result.append(finale_res.text)
+                    with open('df_bet365_res', 'w') as dfres:
+                        dfres.write(result)
                 for i in lst:
                     lst_time = i.find_element(By.CLASS_NAME, "vr-EventTimesNavBarButton")[-1].click()
+
+
 
                     for oddi in lst_time:
                         team_odds = oddi.find_element(By.CLASS_NAME, 'srb-ParticipantStackedBorderless_Odds')
@@ -70,21 +77,27 @@ def premiership():
                             if n == 2:
                                 btts.append(odd.text)
 
-            driver.quit()
-            pd.set_option('display.max_rows', 500)
-            pd.set_option('display.max_columns', 500)
-            pd.set_option('display.width', 1000)
+    driver.quit()
+    pd.set_option('display.max_rows', 500)
+    pd.set_option('display.max_columns', 500)
+    pd.set_option('display.width', 1000)
 
-            dict_gambling = {'Teams': teams, 'btts': btts,
-                             'Over/Under': over_under, '3-way': x12}
+    dict_gambling = {'Teams': teams, 'btts': btts,
+                     'Over/Under': over_under, '3-way': x12}
 
-            df_bet365_prm = pd.DataFrame.from_dict(dict_gambling)
-            df_bet365_prm['Over/Under'] = df_bet365_prm['Over/Under'].apply(lambda x: re.sub(',', '.', x))
-            df_bet365_prm = df_bet365_prm.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+    df_bet365_prm = pd.DataFrame.from_dict(dict_gambling)
+    df_bet365_prm['Over/Under'] = df_bet365_prm['Over/Under'].apply(lambda x: re.sub(',', '.', x))
+    df_bet365_prm = df_bet365_prm.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 
-            output = open('df_bet365_prm', 'wb')
-            pickle.dump(df_bet365_prm, output)
-            output.close()
+    with open('df_bet365_res', 'w') as dfres:
+        for lis_res in result:
+            dfres.write(f'{lis_res}\n')
+
+    output = open('df_bet365_prm', 'wb')
+    pickle.dump(df_bet365_prm, output)
+    output.close()
+
+
 def superleague():
     options = Options()
     options.headless = True
@@ -104,9 +117,16 @@ def superleague():
 
             for super_odds in super_play:
                 lst = super_odds.find_elements(By.CLASS_NAME, "vr-EventTimesNavBarButton")
+                results = i.find_element(By.XPATH, ".//span[@text()= Result").click()
+                for outcome in results:
+                    finale_res = outcome.find_element(By.CLASS_NAME, "vrr-HeadToHeadParticipant_Winner ")
+                    result.append(finale_res.text)
 
                 for i in lst:
                     lst_time = i.find_element(By.CLASS_NAME, "vr-EventTimesNavBarButton")[-1].click()
+                    results = i.find_element(By.XPATH, ".//span[@text()= Result").click()
+
+
 
                     for oddi in lst_time:
                         team_odds = oddi.find_element(By.CLASS_NAME, 'srb-ParticipantStackedBorderless_Odds')
@@ -123,21 +143,26 @@ def superleague():
                             if n == 2:
                                 btts.append(odd.text)
 
-            driver.quit()
-            pd.set_option('display.max_rows', 500)
-            pd.set_option('display.max_columns', 500)
-            pd.set_option('display.width', 1000)
+    driver.quit()
+    pd.set_option('display.max_rows', 500)
+    pd.set_option('display.max_columns', 500)
+    pd.set_option('display.width', 1000)
 
-            dict_gambling = {'Teams': teams, 'btts': btts,
-                             'Over/Under': over_under, '3-way': x12}
+    dict_gambling = {'Teams': teams, 'btts': btts,
+                     'Over/Under': over_under, '3-way': x12}
 
-            df_bet365_superplay = pd.DataFrame.from_dict(dict_gambling)
-            df_bet365_superplay['Over/Under'] = df_bet365_superplay['Over/Under'].apply(lambda x: re.sub(',', '.', x))
-            df_bet365_superplay = df_bet365_superplay.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+    df_bet365_superplay = pd.DataFrame.from_dict(dict_gambling)
+    df_bet365_superplay['Over/Under'] = df_bet365_superplay['Over/Under'].apply(lambda x: re.sub(',', '.', x))
+    df_bet365_superplay = df_bet365_superplay.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 
-            output = open('df_bet365_superplay', 'wb')
-            pickle.dump(df_bet365_superplay, output)
-            output.close()
+    with open('df_bet365_res', 'w') as dfres:
+        for lis_res in result:
+            dfres.write(f'{lis_res}\n')
+
+
+    output = open('df_bet365_superplay', 'wb')
+    pickle.dump(df_bet365_superplay, output)
+    output.close()
 
 def worldcup():
     options = Options()
@@ -158,9 +183,15 @@ def worldcup():
 
             for wc_odds in wc_play:
                 lst = wc_odds.find_elements(By.CLASS_NAME, ".vr-EventTimesNavBarButton")
+                results = i.find_element(By.XPATH, ".//span[@text()= Result").click()
+                for outcome in results:
+                    finale_res = outcome.find_element(By.CLASS_NAME, "vrr-HeadToHeadParticipant_Winner ")
+                    result.append(finale_res.text)
 
                 for i in lst:
                     lst_time = i.find_element(By.CLASS_NAME, ".vr-EventTimesNavBarButton")[-1].click()
+
+
 
                     for oddi in lst_time:
                         team_odds = oddi.find_element(By.CLASS_NAME, 'srb-ParticipantStackedBorderless_Odds')
@@ -177,21 +208,25 @@ def worldcup():
                             if n == 2:
                                 btts.append(odd.text)
 
-            driver.quit()
-            pd.set_option('display.max_rows', 500)
-            pd.set_option('display.max_columns', 500)
-            pd.set_option('display.width', 1000)
+    driver.quit()
+    pd.set_option('display.max_rows', 500)
+    pd.set_option('display.max_columns', 500)
+    pd.set_option('display.width', 1000)
 
-            dict_gambling = {'Teams': teams, 'btts': btts,
-                             'Over/Under': over_under, '3-way': x12}
+    dict_gambling = {'Teams': teams, 'btts': btts,
+                     'Over/Under': over_under, '3-way': x12}
 
-            df_bet365_wc = pd.DataFrame.from_dict(dict_gambling)
-            df_bet365_wc['Over/Under'] = df_bet365_wc['Over/Under'].apply(lambda x: re.sub(',', '.', x))
-            df_bet365_wc = df_bet365_wc.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+    df_bet365_wc = pd.DataFrame.from_dict(dict_gambling)
+    df_bet365_wc['Over/Under'] = df_bet365_wc['Over/Under'].apply(lambda x: re.sub(',', '.', x))
+    df_bet365_wc = df_bet365_wc.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 
-            output = open('df_bet365_wc', 'wb')
-            pickle.dump(df_bet365_wc, output)
-            output.close()
+    with open('df_bet365_res', 'w') as dfres:
+        for lis_res in result:
+            dfres.write(f'{lis_res}\n')
+
+    output = open('df_bet365_wc', 'wb')
+    pickle.dump(df_bet365_wc, output)
+    output.close()
 
 
 
@@ -210,10 +245,14 @@ def euro():
     for play in type_of_play:
         euro_ = play.find_elements(By.CLASS_NAME,"vrl-MeetingsHeaderButton_Title")
         for euro in euro_:
-            euro_play = euro.find_element(By.XPATH,'.//span[@class = "Euro Cup"]').click()
+            euro_play = euro.find_element(By.XPATH,'.//span[@text() = "Euro Cup"]').click()
 
             for euro_odds in euro_play:
              lst = euro_odds.find_elements(By.CLASS_NAME, "vr-EventTimesNavBarButton")
+             results = i.find_element(By.XPATH, ".//span[@text()= Result").click()
+             for outcome in results:
+                 finale_res = outcome.find_element(By.CLASS_NAME, "vrr-HeadToHeadParticipant_Winner ")
+                 result.append(finale_res.text)
 
 
              for i in lst:
@@ -234,21 +273,25 @@ def euro():
                   if n == 2:
                       btts.append(odd.text)
 
-            driver.quit()
-            pd.set_option('display.max_rows', 500)
-            pd.set_option('display.max_columns', 500)
-            pd.set_option('display.width', 1000)
+    driver.quit()
+    pd.set_option('display.max_rows', 500)
+    pd.set_option('display.max_columns', 500)
+    pd.set_option('display.width', 1000)
 
-            dict_gambling = {'Teams': teams, 'btts': btts,
-                             'Over/Under': over_under, '3-way': x12}
+    dict_gambling = {'Teams': teams, 'btts': btts,
+                     'Over/Under': over_under, '3-way': x12}
 
-            df_bet365_euro = pd.DataFrame.from_dict(dict_gambling)
-            df_bet365_euro['Over/Under'] = df_bet365_euro['Over/Under'].apply(lambda x: re.sub(',', '.', x))
-            df_bet365_euro = df_bet365_euro.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+    df_bet365_euro = pd.DataFrame.from_dict(dict_gambling)
+    df_bet365_euro['Over/Under'] = df_bet365_euro['Over/Under'].apply(lambda x: re.sub(',', '.', x))
+    df_bet365_euro = df_bet365_euro.applymap(lambda x: x.strip() if isinstance(x, str) else x)
 
-            output = open('df_bet365_euro', 'wb')
-            pickle.dump(df_bet365_euro, output)
-            output.close()
+    with open('df_bet365_res', 'w') as dfres:
+        for lis_res in result:
+            dfres.write(f'{lis_res}\n')
+
+    output = open('df_bet365_euro', 'wb')
+    pickle.dump(df_bet365_euro, output)
+    output.close()
 
 
 if __name__ == "__main__":
